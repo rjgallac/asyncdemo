@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 public class CallProcess {
 
+    public static final int ONE_SEC_SLEEP = 1000;
+    public static final int TWO_SECOND_SLEEP = 2000;
     @Autowired
     private CallProcessService callProcessService;
 
@@ -23,9 +25,9 @@ public class CallProcess {
 
         long start = System.currentTimeMillis();
 
-        CompletableFuture<String> stringCompletableFuture1 = callAllProcessService.callAll("1", 1000, 1000, 1000);
-        CompletableFuture<String> stringCompletableFuture2 = callAllProcessService.callAll("2", 1000, 1000, 1000);
-        CompletableFuture<String> stringCompletableFuture3 = callAllProcessService.callAll("3", 1000, 1000, 1000);
+        CompletableFuture<String> stringCompletableFuture1 = callAllProcessService.callAll("1", ONE_SEC_SLEEP, TWO_SECOND_SLEEP, ONE_SEC_SLEEP);
+        CompletableFuture<String> stringCompletableFuture2 = callAllProcessService.callAll("2", TWO_SECOND_SLEEP, ONE_SEC_SLEEP, ONE_SEC_SLEEP);
+        CompletableFuture<String> stringCompletableFuture3 = callAllProcessService.callAll("3", ONE_SEC_SLEEP, ONE_SEC_SLEEP, TWO_SECOND_SLEEP);
         log.info("Elapsed time: " + (System.currentTimeMillis() - start));
         CompletableFuture.allOf(stringCompletableFuture1, stringCompletableFuture2, stringCompletableFuture3).join();
 

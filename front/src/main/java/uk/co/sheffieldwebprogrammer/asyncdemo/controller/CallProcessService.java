@@ -1,5 +1,6 @@
 package uk.co.sheffieldwebprogrammer.asyncdemo.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -8,28 +9,18 @@ import org.springframework.web.client.RestTemplate;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Slf4j
 public class CallProcessService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
     @Async
-    public CompletableFuture<String> doAsync1(String test){
-        //do something
-        ResponseEntity<String> forEntity = restTemplate.getForEntity("http://127.0.0.1:8081/test1?test=" + test, String.class);
-        return CompletableFuture.completedFuture(forEntity.getBody());
-    }
+    public CompletableFuture<String> doAsync(String test, long sleep){
+        long start = System.currentTimeMillis();
 
-    @Async
-    public CompletableFuture<String> doAsync2(String test){
-        //do something
-        ResponseEntity<String> forEntity = restTemplate.getForEntity("http://127.0.0.1:8081/test2?test=" + test, String.class);
-        return CompletableFuture.completedFuture(forEntity.getBody());
-    }
+        ResponseEntity<String> forEntity = restTemplate.getForEntity("http://127.0.0.1:8081/test?test=" + test + "&sleep=" + sleep, String.class);
+        log.info("Elapsed time rest call: " + (System.currentTimeMillis() - start));
 
-    @Async
-    public CompletableFuture<String> doAsync3(String test){
-        //do something
-        ResponseEntity<String> forEntity = restTemplate.getForEntity("http://127.0.0.1:8081/test3?test=" + test, String.class);
         return CompletableFuture.completedFuture(forEntity.getBody());
     }
 }

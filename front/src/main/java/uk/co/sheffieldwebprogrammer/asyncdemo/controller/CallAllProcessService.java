@@ -13,6 +13,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static uk.co.sheffieldwebprogrammer.asyncdemo.controller.Functions.getCompletedString;
+
 @Service
 @Slf4j
 public class CallAllProcessService {
@@ -24,7 +26,6 @@ public class CallAllProcessService {
     public CompletableFuture<String> callAll(String test, long firstSleep, long secondSleep, long thirdSleep){
         long start = System.currentTimeMillis();
         Predicate<String> not5 = x -> !x.equals("test2");
-        Function<CompletableFuture<String>, String> getCompletedString = x -> get(x);
 
         CompletableFuture<String> stringCompletableFuture1 = callProcessService.doAsync("slow" + test, firstSleep);
         CompletableFuture<String> stringCompletableFuture2 = callProcessService.doAsync("medium" + test, secondSleep);
@@ -39,13 +40,4 @@ public class CallAllProcessService {
 
     }
 
-    private String get(CompletableFuture<String> test){
-        try {
-            return test.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
